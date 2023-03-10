@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .cars-datalist .text-column p:last-child {
+                color: #757575;
+            }
+
+            .cars-datalist .car-item {
+                padding: 8px 14px;
+            }
+
+            .cars-datalist .car-item img, .cars-datalist .car-item .car-details {
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 14px;
+            }
+
+            .cars-datalist .car-item button {
+                float: right;
+            }
+
+            .cars-datalist ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .ui-car-display td:last-child {
+                font-weight: 700;
+            }
+
+            @media (max-width: 640px) {
+                .cars-datalist .text-column {
+                    text-align: center;
+                }
+
+                .ui-tree {
+                    width: 100%;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="title">Empleados</ui:define>
+
+    <ui:define name="viewname">Empleados</ui:define>
+
+    <ui:define name="content">
+        <h:form id="clientesD">
+            <p:growl id="infos" showDetail="true"/>
+            <p:toolbar id="cab1">
+
+                <f:facet name="left">
+
+                    <p:inputText value="#{bclientes.numeroClientes}" placeholder="Numero Cliente"/>
+                </f:facet>
+                <f:facet name="right">
+                    <p:commandButton value="Buscar"  actionListener="#{bclientes.buscarCliente()}" update=":clientesD:listadoClientes"/>
+                </f:facet>
+
+            </p:toolbar>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>Empleados</h1>
+                        <p:dataTable var="cliens" id="listadoClientes" value="#{bclientes.listaClientes}"
+                                     reflow="true"
+                                     paginator="true" rows="10">
+                            <p:column headerText="Numero Clientes" width="10%">
+                                <h:outputText value="#{cliens.telefono}"/>
+                            </p:column>
+
+                            <p:column headerText="Cliente" width="20%" >
+                                <h:outputText value="#{cliens.nombre} #{cliens.apellido}"/>
+                            </p:column>
+
+                            <p:column  headerText="Direccion" width="40%">
+                                <h:outputText value="#{cliens.direccion}"/>
+                            </p:column>
+
+                            <p:column headerText="Notas Direccion" width="40%">
+                                <h:outputText value="#{cliens.notasDireccion}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,109 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .cars-datalist .text-column p:last-child {
+                color: #757575;
+            }
+
+            .cars-datalist .car-item {
+                padding: 8px 14px;
+            }
+
+            .cars-datalist .car-item img, .cars-datalist .car-item .car-details {
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 14px;
+            }
+
+            .cars-datalist .car-item button {
+                float: right;
+            }
+
+            .cars-datalist ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .ui-car-display td:last-child {
+                font-weight: 700;
+            }
+
+            .ui-rowgroup-header > td .ui-column-title, .ui-datatable-summaryrow > td .ui-column-title{
+                display: none;
+            }
+
+            @media (max-width: 640px) {
+                .cars-datalist .text-column {
+                    text-align: center;
+                }
+
+                .ui-tree {
+                    width: 100%;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="title">Reporte Descuentos</ui:define>
+
+    <ui:define name="viewname">Reporte Descuentos</ui:define>
+
+    <ui:define name="content">
+        <h:form id="desc">
+            <p:panel>
+                <p:outputLabel for="diaSelect" value="Selecione Dia"/>
+                <p:calendar id="diaSelect" pattern="dd/MM/yyyy" mask="true" value="#{bdescuentos.diaSelect}" showOn="button">
+                    <p:ajax event="dateSelect" listener="#{bdescuentos.obtenerDescuentos()}" update="descuentosTbl"/>
+                </p:calendar>
+            </p:panel>
+
+            <p:panel header="Datos Descuentos">
+                <p:dataTable  var="descuent" id="descuentosTbl" value="#{bdescuentos.listaDescuentos}"
+                             sortBy="#{descuent.nombresucursal}"  expandableRowGroups="true"  >
+
+                    <p:headerRow expanded="false">
+                        <p:column colspan="3">
+                            <h:outputText styleClass="p-ml-2" value="#{descuent.nombresucursal}" style="font-weight:bold; color: #bc1f63" />
+                        </p:column>
+                        <p:column colspan="1">
+                            <h:outputText style="font-weight:bold; color: #3e7f5b" value="#{bdescuentos.totalDescuentos(bdescuentos.listaDescuentos, descuent.idSucusal)}">
+                                <f:convertNumber pattern="¤#,##0.00" currencySymbol="$" />
+                            </h:outputText>
+                        </p:column>
+                    </p:headerRow>
+
+                    <p:column headerText="Fecha" >
+                        <h:outputText value="#{descuent.fecha}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/El_Salvador"/>
+                        </h:outputText>
+                    </p:column>
+
+
+                    <p:column headerText="Codigo descuento">
+                        <h:outputText value="#{descuent.codigoTipoDescuento}" />
+                    </p:column>
+
+                    <p:column headerText="Descuento">
+                        <h:outputText value="#{descuent.tipoDescuento}" />
+                    </p:column>
+
+
+                    <p:column headerText="Moton" style="font-weight:bold">
+                        <h:outputText value="#{descuent.monto}" style="font-weight:bold">
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="$" />
+                        </h:outputText>
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

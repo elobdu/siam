@@ -1,0 +1,44 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pa="http://primefaces.org/atlantis">
+
+    <div class="topbar">
+        <div class="logo">
+
+        </div>
+
+        <a id="topbar-menu-button" href="#">
+            <i class="fa fa-bars"></i>
+        </a>
+
+        <ul class="topbar-menu fadeInDown animated">
+            <li class="profile-item">
+                <a href="#">                            
+                    <div class="profile-image">
+                        <p:graphicImage name="images/logoz.png" library="atlantis-layout" height="100" />
+                    </div>
+                    <div class="profile-info">
+                        <span class="topbar-item-name profile-name">#{bInfoSesion.user.nombres}</span>
+                        <span class="topbar-item-name profile-role">#{bInfoSesion.rolUsuario.nombre}</span>
+                    </div>
+                </a>
+
+                <ul class="animated">
+
+                    <li role="menuitem">
+                        <h:form id="salida">
+                            <p:commandLink id="logout"  actionListener="#{bInfoSesion.cerrarSesion()}" action="/login?faces-redirect=true">
+                            <i class="fa fa-fw fa-sign-out"></i>
+                            <span>Salir</span>
+                        </p:commandLink> 
+                        </h:form>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</ui:composition>

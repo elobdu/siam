@@ -1,0 +1,132 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .cars-datalist .text-column p:last-child {
+                color: #757575;
+            }
+
+            .cars-datalist .car-item {
+                padding: 8px 14px;
+            }
+
+            .cars-datalist .car-item img, .cars-datalist .car-item .car-details {
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 14px;
+            }
+
+            .cars-datalist .car-item button {
+                float: right;
+            }
+
+            .cars-datalist ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .ui-car-display td:last-child {
+                font-weight: 700;
+            }
+
+            .ui-rowgroup-header > td .ui-column-title, .ui-datatable-summaryrow > td .ui-column-title{
+                display: none;
+            }
+
+            @media (max-width: 640px) {
+                .cars-datalist .text-column {
+                    text-align: center;
+                }
+
+                .ui-tree {
+                    width: 100%;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="title">Descuentos</ui:define>
+
+    <ui:define name="viewname">Descuentos</ui:define>
+
+    <ui:define name="content">
+        <h:form id="descuentos">
+            <p:growl id="msj"/>
+            <p:toolbar id="btns">
+                <f:facet name="left">
+                    <p:outputLabel for="diaSelectIni" value="Selecione Dia inicio"/>
+                    <p:calendar id="diaSelectIni" pattern="dd/MM/yyyy" mask="true" value="#{bdescuentos.diaSelecionIni}" showOn="button" />
+
+                    <p:outputLabel for="diaSelectFin" value="Selecione Dia Final"/>
+                    <p:calendar id="diaSelectFin" pattern="dd/MM/yyyy" mask="true" value="#{bdescuentos.diaSelecionFin}" showOn="button" />
+
+                    <p:commandButton value="Obtener Reporte" actionListener="#{bdescuentos.obtenerDescuentosEmplados()}" update="descuentos"/>
+
+                </f:facet>
+
+                <f:facet name="right">
+                    <p:commandButton value="Nuevo Descuento" onclick="PF('descuentosWr').show()"/>
+                </f:facet>
+
+            </p:toolbar>
+
+            <p:panel header="Datos de ventas">
+                <p:dataTable var="desc" id="descuentostbl" value="#{bdescuentos.descuentosList}">
+
+                    <p:column headerText=" Empleado" width="15%" >
+                        <h:outputText value="#{bdescuentos.obtenerEmpleado(desc.codigoEmpleado).nombreEmpleados}" />
+                    </p:column>
+
+                    <p:column headerText="Valor" width="10%">
+                        <h:outputText value="#{desc.valorDescuento}" >
+                            <f:convertNumber pattern="¤#,##0.00" currencySymbol="$" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Descripcion" >
+                        <h:outputText value="#{desc.descripcionDescuento}" style="font-weight:bold" />
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+
+        </h:form>
+
+        <h:form id="dialogDes">
+            <p:dialog id="desc" widgetVar="descuentosWr"  modal="true">
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="Empleado"/>
+
+                    <p:autoComplete  id="empleadoNombre" placeholder="Empleado Nombre" value="#{bdescuentos.empleadoSel}"
+                                     required="false" var="emple" itemLabel="#{emple.nombreEmpleados}" itemValue="#{emple}"
+                                     completeMethod="#{bdescuentos.complete}" converter="omnifaces.SelectItemsConverter" scrollHeight="225"
+                                     maxResults="25" style="font-size: 12px;">
+                        <p:ajax event="blur" update=":descuentos:msj" listener="#{bdescuentos.select()}"/>
+                        <o:converter converterId="omnifaces.ListConverter" list="#{bdescuentos.emps}"/>
+                    </p:autoComplete>
+                    <p:outputLabel value="Descripcion"/>
+                    <p:inputText value="#{bdescuentos.descuentos.descripcionDescuento}"/>
+                    <p:outputLabel value="Valor Descuento"/>
+                    <p:inputText value="#{bdescuentos.descuentos.valorDescuento}"/>
+                    <p:outputLabel value="Fecha Ingreso"/>
+                    <p:calendar id="fechingre" pattern="dd/MM/yyyy" mask="true" value="#{bdescuentos.descuentos.fechaDescuento}" showOn="button" />
+
+                    <p:commandButton value="guardar" update=":descuentos:msj :dialogDes:desc" actionListener="#{bdescuentos.guardarDescuento()}" onclick="PF('descuentosWr').hide()" icon="fa fa-floppy-o"/>
+
+
+                </p:panelGrid>
+
+
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

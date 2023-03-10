@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Marlen Lamur | WCOSMODAS</title>
+    </h:head>
+
+    <h:body styleClass="login-body">
+        <p:growl id="mensajes" showDetail="true" life="2000" />
+        <h:form id="logins">
+            <div class="login-panel ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12 logo-container">
+                        <p:graphicImage name="images/wlogo.png" library="atlantis-layout" />
+                        <h1>Ingrese sus Credenciales</h1>
+                        <h2>Bienvenidos a WCOSMODAS</h2>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:inputText value="#{bLogin.nombre}" id="username"
+                                     onkeypress="if (event.keyCode == 13) {
+                                                 $(function () {
+                                                     PrimeFaces.focus(':logins:password');
+                                                 })
+                                             }
+                                             ;
+                                     "
+                                     required="true" label="username" />
+                    </div>
+                    <div class="ui-g-12">
+                        <p:password value="#{bLogin.clave}" id="password" required="true"
+                                    onkeypress="if (event.keyCode == 13) {
+                                                $(function () {
+                                                    PrimeFaces.focus(':logins:loginButton');
+                                                })
+                                            }
+                                            ;
+                                    "
+                                    label="password" />
+                    </div>
+                    <div class="ui-g-12 chkbox-container">
+                    </div>
+                    <div class="ui-g-12 button-container">
+                        <p:commandButton id="loginButton" value="Ingresar"
+                                         actionListener="#{bLogin.login(actionEvent)}" icon="fa fa-user"  styleClass="green-btn" update=":mensajes"
+                                         oncomplete="manejarLogin(xhr, status, args)" />
+                                            </div>
+                                        <div class="ui-g-12 logo-container">
+                        <h2>Copyright© Obper</h2>
+                    </div>
+                    
+                </div>
+            </div>
+        </h:form>
+        <h:outputStylesheet name="css/layout-blue.css" library="atlantis-layout" />
+    </h:body>
+    <script type="text/javascript">
+        //<![CDATA[
+        function manejarLogin(xhr, status, args) {
+            if (!args.validationFailed && args.estaLogeado) {
+                setTimeout(function () {
+                    window.location = args.view;
+                }, 500);
+            }
+        }
+//]]>
+    </script>
+</html>

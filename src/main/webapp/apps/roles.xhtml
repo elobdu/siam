@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:of="http://omnifaces.org/functions">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/template.xhtml">
+
+            <ui:define name="content">
+                <h:form id="grupos">
+                    <p:growl id="nesajes" showDetail="true" escape="false" />
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>Roles</h1>
+                                <p:commandButton value="Nuevo Rol" onclick="PF('nuevoGrupo').show()" />
+                                <hr/>
+                                <p:dataTable id="lstGrupos" var="us" value="#{broles.grupos}" style="margin-bottom:20px"
+                                             rows="10"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15">
+                                    <p:column headerText="Codigo">
+                                        <h:outputText value="#{us.IDRol}" />
+                                    </p:column>
+
+                                    <p:column headerText="Nombre Rol">
+                                        <h:outputText value="#{us.nombre}" />
+                                    </p:column>
+
+                                    <p:column headerText="Fecha de Creacion">
+                                        <h:outputText value="#{us.fechaCreado}" />
+                                    </p:column>
+
+                                    <p:column headerText="Pantallas Permitidas">
+                                        <p:commandButton update=":agregaOpcion:opcf" oncomplete="PF('agregarOpciones').show()"  value="#{broles.opcionesRol(us.IDRol)}" >
+                                            <f:setPropertyActionListener value="#{us}" target="#{broles.selectGrupo}" />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                    <p:column headerText="Editar grupo">
+                                        <p:commandButton update="editarFomrs" oncomplete="PF('editarGrupo').show()"  icon="fa fa-pencil">
+                                            <f:setPropertyActionListener value="#{us}" target="#{broles.selectGrupo2}" />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+                <h:form id="nuevoFomrs">
+                    <p:dialog header="Nuevo Grupo" widgetVar="nuevoGrupo" closable="true" minHeight="40" modal="true">      
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:outputLabel value="Nombre Grupo:"/>
+                            <p:inputText value="#{broles.nuevoGrupo.nombre}" />
+                            <p:commandButton value="Guardar" actionListener="#{broles.guardarNuevoGrupo(broles.nuevoGrupo)}" update="grupos" oncomplete="PF('nuevoGrupo').hide()"/>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="editarFomrs">
+                    <p:dialog header="Editar Grupo" widgetVar="editarGrupo" closable="true" minHeight="40" modal="true">      
+                        <h:panelGrid columns="2" cellpadding="10">
+
+                            <p:outputLabel value="Nombre Grupo:" />
+                            <p:inputText value="#{broles.selectGrupo2.nombre}" />
+                            <p:commandButton value="Editar" actionListener="#{broles.editarNuevoGrupo(broles.selectGrupo2)}" update="grupos" oncomplete="PF('editarGrupo').hide()"/>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="agregaOpcion">
+                    <p:dialog header="Permisos de Pantalla" widgetVar="agregarOpciones" closable="true" minHeight="40" modal="true">
+                        <p:pickList id="opcf" value="#{broles.opciones}" var="opcs" itemValue="#{opcs}" >
+                            <o:converter converterId="omnifaces.ListConverter" list="#{broles.opcionesPorGrupoOF}" />
+                            <f:facet name="sourceCaption">Disponibles</f:facet>
+                            <f:facet name="targetCaption">Habilitados</f:facet>
+                            <p:ajax event="transfer" listener="#{broles.onTransfer}"  update="grupos" />
+
+
+                            <p:column style="width:90%;">
+                                <h:outputText value="#{opcs.titulo}" />
+                            </p:column>
+                        </p:pickList>
+
+                    </p:dialog>
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:of="http://omnifaces.org/functions">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/template.xhtml">
+
+            <ui:define name="content">
+                <h:form id="categs">
+                    <p:growl id="nesajes" showDetail="true" escape="false" />
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>Categoría</h1>
+                                <p:commandButton value="Nuevo Categoría" onclick="PF('nuevoCat').show()" />
+                                <hr/>
+                                <p:dataTable id="ltsCategorias" var="cat" value="#{bcategorias.categoriasLista}" style="margin-bottom:20px"
+                                             rows="10"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15">
+                                    <p:column headerText="Id Categoria" width="5%">
+                                        <h:outputText value="#{cat.IDTipoAlerta}" />
+                                    </p:column>
+
+                                    <p:column headerText="Categoría" width="25%">
+                                        <h:outputText value="#{cat.nombreTipoAlerta}" />
+                                    </p:column>
+
+                                    <p:column headerText="Estado" width="10%">
+                                        <h:outputText value="#{bcategorias.validaActivo(cat.activo)}" style="font-weight: bold; color: #{bcategorias.validaActivoColor(cat.activo)}" />
+                                    </p:column>
+
+
+                                    <p:column headerText="Editar" width="5%">
+                                        <p:commandButton update=":editarFomrs" oncomplete="PF('editarCat').show()"  icon="fa fa-pencil">
+                                            <f:setPropertyActionListener value="#{cat}" target="#{bcategorias.categoriasSelect}" />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+
+                <h:form id="nuevoFomrs">
+                    <p:dialog header="Nueva Categoría" widgetVar="nuevoCat" closable="true" minHeight="40" modal="true">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:outputLabel value="Nombre Categoría:"/>
+                            <p:inputText value="#{bcategorias.categorias.nombreTipoAlerta}" required="true" />
+                            <p:outputLabel value="Activar:"/>
+                            <p:selectBooleanButton id="ActivoN" value="#{bcategorias.categorias.activo}" onLabel="Activo"
+                                                   offLabel="Inactivo"/>
+                            <p:commandButton value="Guardar" actionListener="#{bcategorias.guardarCategoria(bcategorias.categorias)}" update="categs" oncomplete="PF('nuevoCat').hide()"/>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="editarFomrs">
+                    <p:dialog header="Editar Categoria" widgetVar="editarCat" closable="true" minHeight="40" modal="true">
+                        <h:panelGrid columns="2" cellpadding="10">
+
+                            <p:outputLabel value="Nombre Categoría:" />
+                            <p:inputText value="#{bcategorias.categoriasSelect.nombreTipoAlerta}" required="true" />
+                            <p:outputLabel value="Activar:"/>
+                            <p:selectBooleanButton id="ActivoE" value="#{bcategorias.categoriasSelect.activo}" onLabel="Activo"
+                                                   offLabel="Inactivo"/>
+                            <p:commandButton value="Editar" actionListener="#{bcategorias.editarCatergoria(bcategorias.categoriasSelect)}" update="categs" oncomplete="PF('editarCat').hide()"/>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

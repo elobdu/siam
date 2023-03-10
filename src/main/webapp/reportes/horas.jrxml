@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="73e83ac0-a32f-4dde-bb36-c668f270468b">
+	<property name="ireport.zoom" value="1.4641000000000015"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="nombre" class="java.lang.String"/>
+	<parameter name="totalDiurnas" class="java.lang.String"/>
+	<parameter name="totalNoct" class="java.lang.String"/>
+	<parameter name="totalHor" class="java.lang.String"/>
+	<parameter name="pagoDi" class="java.lang.String"/>
+	<parameter name="pagoNoc" class="java.lang.String"/>
+	<parameter name="pagoExt" class="java.lang.String"/>
+	<parameter name="subTo" class="java.lang.String"/>
+	<parameter name="renta" class="java.lang.String"/>
+	<parameter name="totalApa" class="java.lang.String"/>
+	<parameter name="pagoMi" class="java.lang.String"/>
+	<field name="fecha" class="java.util.Date"/>
+	<field name="inicioHora" class="java.util.Date"/>
+	<field name="finHora" class="java.util.Date"/>
+	<field name="horasDiurnas" class="java.lang.String"/>
+	<field name="totalHoras" class="java.lang.String"/>
+	<field name="horasNocturnas" class="java.lang.String"/>
+	<field name="corrido" class="java.lang.Boolean"/>
+	<field name="empCod" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="218" y="21" width="118" height="50" uuid="2fa3f945-9436-48ea-8176-e41e23500f5b"/>
+				<imageExpression><![CDATA["/opt/logo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement x="282" y="40" width="238" height="19" uuid="9536a297-410a-4554-988f-187448cbb359"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans" size="14"/>
+				</textElement>
+				<text><![CDATA[Horas de trabajo Temporales]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="44" y="40" width="182" height="19" uuid="e20751f5-0b86-4578-9cd6-44244f6d1558"/>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="242" y="40" width="40" height="19" uuid="f07d799e-f74c-4477-ab6c-beb5d1fbc138"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empCod}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="228" y="0" width="98" height="21" uuid="852da370-6839-4c50-8a74-be3e052ebeed"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="44" y="59" width="473" height="1" uuid="31f65880-4711-4ce4-9167-5ce5e1dd747a"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="50" y="0" width="78" height="20" uuid="81140a9d-1742-4533-81ed-ce0a9f98904f"/>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="128" y="0" width="65" height="20" uuid="c1e7368c-e284-4426-ac00-1ee7ad209989"/>
+				<text><![CDATA[Inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="193" y="0" width="72" height="20" uuid="5004af77-1bda-483e-8d68-60c25e58410e"/>
+				<text><![CDATA[Fin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="0" width="65" height="20" uuid="bcb4018e-e7c5-4e35-9dc6-8fed9925573c"/>
+				<text><![CDATA[Diurnas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="330" y="0" width="70" height="20" uuid="1165d254-7d2e-40d6-8802-265af35b5228"/>
+				<text><![CDATA[Nocturnas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="0" width="68" height="20" uuid="f8c624a6-a6d7-4ac7-a92a-31baabbdaf93"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="468" y="0" width="40" height="20" uuid="f7fcb2fd-fbe3-48b7-b6a1-a857aca64a99"/>
+				<text><![CDATA[Corrido]]></text>
+			</staticText>
+			<line>
+				<reportElement x="44" y="20" width="474" height="1" uuid="2f15c9ea-3ae3-4b93-9f82-345c200c3306"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Immediate">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="50" y="0" width="78" height="20" uuid="312c2f2c-c717-428d-b22d-ec5f8c2333e7"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField pattern="h:mm a">
+				<reportElement x="128" y="0" width="65" height="20" isPrintInFirstWholeBand="true" uuid="c5431322-db0d-43e4-9fc0-9eabf364ac74"/>
+				<textFieldExpression><![CDATA[$F{inicioHora}]]></textFieldExpression>
+			</textField>
+			<textField pattern="h:mm a">
+				<reportElement x="193" y="0" width="72" height="20" uuid="3273801a-8740-4daa-87c6-5445e944ff10"/>
+				<textFieldExpression><![CDATA[$F{finHora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="265" y="0" width="65" height="20" uuid="e3dabd7d-4129-4abb-9da2-9e863af22b4b"/>
+				<textFieldExpression><![CDATA[$F{horasDiurnas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="0" width="70" height="20" uuid="36756e53-3cc3-4833-b981-0249e559f4a5"/>
+				<textFieldExpression><![CDATA[$F{horasNocturnas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="0" width="68" height="20" uuid="f9c0ff15-279a-4a12-923e-49b63dc8f27f"/>
+				<textFieldExpression><![CDATA[$F{totalHoras}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="468" y="0" width="40" height="20" uuid="9bf098ae-3fdd-4592-8fa1-dc003599f331"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{corrido} == true? "SI":"NO"]]></textFieldExpression>
+				<patternExpression><![CDATA[( $F{corrido} == Boolean.TRUE ? "Yes":"No")]]></patternExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="205" splitType="Stretch">
+			<line>
+				<reportElement x="44" y="0" width="474" height="1" uuid="2aa883a1-fee6-4438-b95f-e35f2a6e6ae1"/>
+			</line>
+			<textField>
+				<reportElement x="408" y="1" width="110" height="18" uuid="268f7cec-3619-4534-a506-368a45426049"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{totalDiurnas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="408" y="19" width="110" height="18" uuid="ba02522c-0581-453d-9c0a-78d6e930c679"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{totalNoct}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="408" y="37" width="110" height="18" uuid="db089fc2-fca3-4213-9a90-c9632cc3b93e"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{totalHor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="265" y="1" width="140" height="18" uuid="573f5860-c966-41d0-b141-df228c944346"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[TOTALES HORAS DIURNAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="251" y="19" width="154" height="18" uuid="96d2982d-cee2-4726-acea-0971fdd71953"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[TOTALES HORAS NOCTURNAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="37" width="140" height="18" uuid="a65c137f-012f-448a-b955-e27df12fe977"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[TOTALES  DE HORAS]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="142" y="1" width="108" height="18" uuid="01e72473-6695-4937-b867-7cf828ef6f46"/>
+				<textFieldExpression><![CDATA[$P{pagoDi}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="250" y="1" width="1" height="127" uuid="db8f3795-0f9f-4e3c-8def-a672d5f5732e"/>
+			</line>
+			<staticText>
+				<reportElement x="50" y="1" width="92" height="18" uuid="2dea897e-7c7c-4534-b7dc-d08462cfd478"/>
+				<text><![CDATA[Pago Diurno]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="142" y="20" width="108" height="18" uuid="08869cd3-fa7e-46c8-af01-28887e5dba2b"/>
+				<textFieldExpression><![CDATA[$P{pagoNoc}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="50" y="20" width="92" height="18" uuid="c3e4568e-49f4-4ee0-adb2-bf642ac76b51"/>
+				<text><![CDATA[Pago Nocturno]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="38" width="92" height="18" uuid="4ecf08c9-1263-4174-ab1e-6cb5c80acc33"/>
+				<text><![CDATA[Pago Adicional]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="142" y="38" width="108" height="18" uuid="da957af5-efa8-49ec-8420-a33851f88a6b"/>
+				<textFieldExpression><![CDATA[$P{pagoExt}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="50" y="56" width="92" height="18" uuid="86c1a4fc-7d40-476a-91c2-a8ca76435acf"/>
+				<text><![CDATA[SubTotal]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="142" y="56" width="108" height="18" uuid="71fdfb7f-abfc-445d-8edb-4a4b936ba606"/>
+				<textFieldExpression><![CDATA[$P{subTo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="50" y="74" width="92" height="18" uuid="796f227a-0719-46f2-b0b8-10c9a33e0dce"/>
+				<text><![CDATA[--10% ISR]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="142" y="74" width="108" height="18" uuid="8906c8e0-eb93-413d-9748-1d5020dda386"/>
+				<textFieldExpression><![CDATA[$P{renta}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="52" y="92" width="200" height="1" uuid="f99d411c-d8dc-4b7e-87e1-e3c2f9948d24"/>
+			</line>
+			<staticText>
+				<reportElement x="50" y="94" width="92" height="18" uuid="223e3691-fa15-4856-ab91-f395655d172e"/>
+				<text><![CDATA[TOTA A PAGAR]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="142" y="94" width="108" height="18" uuid="0388fbd7-ff3d-4dc0-8751-fa7440fdb774"/>
+				<textFieldExpression><![CDATA[$P{totalApa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="121" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

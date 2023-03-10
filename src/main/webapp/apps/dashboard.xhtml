@@ -1,0 +1,151 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Dashboard</ui:define>
+
+    <ui:define name="viewname">Dashboard</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            //<![CDATA[
+            function skinBar() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#68bafc', '#f97bb2'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    renderer: $.jqplot.BarRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            //]]>  
+        </script>
+        <style type="text/css">
+            .main-content {
+                padding: 0;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g dashboard">            
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g card overview-box overview-box-1">
+                    <div class="ui-g-4 overview-box-icon">
+                        <i class="fa fa-thumbs-up"></i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="overview-box-count">#{infosDashboard.clientesConPedido}</span>
+                    </div>
+                    <div class="ui-g-12 overview-box-footer">
+                        <p:outputLabel style="font-size: x-large" value="Clientes con pedido"/>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g card overview-box overview-box-2">
+                    <div class="ui-g-4 overview-box-icon">
+                        <i class="fa fa-thumbs-down"></i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="overview-box-count">#{infosDashboard.clientesSinPedido}</span>
+                    </div>
+                    <div class="ui-g-12 overview-box-footer">
+                        <p:outputLabel style="font-size: x-large" value="Clientes sin pedido"/>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g card overview-box overview-box-3">
+                    <div class="ui-g-4 overview-box-icon">
+                        <i class="fa fa-dollar"></i>
+                    </div>
+                    <div class="ui-g-8">
+                        <p:outputLabel class="overview-box-count" value="#{infosDashboard.ventaTotalConIva}">
+                            <f:convertNumber pattern="#00,000.00" />
+                        </p:outputLabel>
+                    </div>
+                    <div class="ui-g-12 overview-box-footer">
+                        <p:outputLabel style="font-size: x-large" value="venta con iva"/>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="ui-g card overview-box overview-box-4">
+                    <div class="ui-g-4 overview-box-icon">
+                        <i class="fa fa-dollar"></i>
+                    </div>
+                    <div class="ui-g-8">
+                        <p:outputLabel class="overview-box-count" value="#{infosDashboard.ventaTotalSinIva}">
+                            <f:convertNumber pattern="#00,000.00"  />
+                        </p:outputLabel>
+                    </div>
+
+                    <div class="ui-g-12 overview-box-footer">
+                        <p:outputLabel style="font-size: x-large" value="venta sin iva"/>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div class="ui-g-12">
+                <div class="card card-w-title">
+                    <h1>Top 20 productos mas vendidos</h1>
+                    <p:dataTable var="listas" value="#{infosDashboard.productosMasVendidos}" rows="10"
+                                 paginator="true" reflow="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                        <p:column headerText="Codigo" width="10%">
+                            <h:outputText value="#{listas.productoCodigo}" />
+                        </p:column>
+
+                        <p:column headerText="Producto" width="60%">
+                            <h:outputText value="#{listas.nombreProducto}" />
+                        </p:column>
+
+                        <p:column headerText="Vendidos" width="10%">
+                            <h:outputText value="#{listas.vendidos}" />
+                        </p:column>
+
+                        <p:column headerText="Montos de venta" width="10%">
+                            <h:outputText value="$ #{listas.venta}" />
+                        </p:column>
+                        <p:column headerText="Existencias Central" width="10%">
+                            <h:outputText value="#{listas.existenciaActualCentral}" />
+                        </p:column>
+                        <p:column headerText="Existencias Salas" width="10%">
+                            <h:outputText value=" #{listas.existenciaActualSalas}" />
+                        </p:column>
+
+                    </p:dataTable>
+                </div>
+            </div>
+
+
+        </div>
+    </ui:define>
+
+</ui:composition>

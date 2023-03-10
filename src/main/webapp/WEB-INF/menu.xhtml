@@ -1,0 +1,21 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pa="http://primefaces.org/atlantis">
+
+    <div class="layout-sidebar #{guestPreferences.menuLayout()}">
+        <pa:tabMenu>
+            <pa:tab icon="fa fa-home" title="Inicio" outcome="#{bInfoSesion.home}">
+                <h:form id="menu-form">
+                    <pa:menu widgetVar="me" model="#{bmenus.model}" >
+                        
+                    </pa:menu>
+                </h:form>
+            </pa:tab>       
+        </pa:tabMenu>        
+    </div>
+
+</ui:composition>

@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/template.xhtml">
+
+            <ui:define name="content">
+                 <h:form id="form">
+             <p:growl id="messages" showDetail="true"/>  
+            <center>
+                <p:panelGrid columns="3" style="width: 60%; font-size: 12px;">
+                <h:outputText value="Ajuste codigo"/>
+                <h:outputText value="Programa"/>
+                <h:outputText value="Sala"/>
+                <p:inputText placeholder="Ajuste Codigo" value="#{bAjuste.ajusteCodigo}">
+               
+                </p:inputText>
+                <p:selectOneMenu id="txt3" value="#{bAjuste.programa}" required="true" label="Text 3">
+                <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+                    <f:selectItem itemValue="ENE" itemLabel="ENE"/>
+                    <f:selectItem itemValue="FEB" itemLabel="FEB"/>
+                    <f:selectItem itemValue="MAR" itemLabel="MAR"/>
+                    <f:selectItem itemValue="ABR" itemLabel="ABR"/>
+                    <f:selectItem itemValue="MAY" itemLabel="MAY"/>
+                    <f:selectItem itemValue="JUN" itemLabel="JUN"/>
+                    <f:selectItem itemValue="JUL" itemLabel="JUL"/>
+                    <f:selectItem itemValue="AGO" itemLabel="AGO"/>
+                    <f:selectItem itemValue="SEP" itemLabel="SEP"/>
+                    <f:selectItem itemValue="OCT" itemLabel="OCT"/>
+                    <f:selectItem itemValue="NOV" itemLabel="NOV"/>
+                    <f:selectItem itemValue="DIC" itemLabel="DIC"/>
+                </p:selectOneMenu> 
+                <p:selectOneMenu id="sucursal"  value="#{bAjuste.sucursal}">
+                <f:selectItem itemLabel="Selecione Sucursal" itemValue="" />
+                <f:selectItem itemLabel="Central" itemValue="01" />
+                <f:selectItem itemLabel="Soyapango" itemValue="03" />
+                <f:selectItem itemLabel="Santa Ana" itemValue="07" />
+                <f:selectItem itemLabel="Sonsonate" itemValue="08" />
+                <f:selectItem itemLabel="Chalatenango" itemValue="09" />
+                <f:selectItem itemLabel="Zacatecoluca" itemValue="06" />
+                <f:selectItem itemLabel="Ususlutan" itemValue="05" />
+                <f:selectItem itemLabel="San Miguel" itemValue="04" />
+            </p:selectOneMenu>      
+                
+                
+            </p:panelGrid>
+            
+                <p:dataTable var="ajs" value="#{bdetalleAjuste.detalleAjustes}" rows="10"
+                         style="width: 60%; font-size: 11px"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+        <p:column headerText="Sucursal">
+            <h:outputText value="#{ajs.sucursalCodigo}" />
+        </p:column>
+ 
+        <p:column headerText="Codigo Producto">
+            <h:outputText value="#{ajs.productoCodigo}" />
+        </p:column>
+ 
+        <p:column headerText="Cantidad">
+            <h:outputText value="#{ajs.resultado}" />
+        </p:column>
+ 
+        <p:column headerText="Tipo">
+            <h:outputText value="#{ajs.detalleAjusteTipo}" />
+        </p:column>
+    </p:dataTable>
+                <p:commandButton value="Salidas" actionListener="#{bAjuste.Salidas(actionEvent)}" update=":form:messages">
+                <p:confirm header="Confirmar" message="Desea Ajustar Salidas" icon="ui-icon-alert" />
+                </p:commandButton>
+                <p:commandButton value="Entradas" actionListener="#{bAjuste.Entradas(actionEvent)}" update=":form:messages">
+                <p:confirm header="Confirmar" message="Desea Ajustar Entradas" icon="ui-icon-alert" />
+                </p:commandButton>
+                <br/>
+            <p:commandButton value="Actualizar Inventario" actionListener="#{bAjuste.ajusteInventario(actionEvent)}" update=":form:messages">
+            <p:confirm header="Confirmacion" message="Desea Actualizar Inventario" icon="ui-icon-alert" />
+            </p:commandButton>
+                
+        <p:confirmDialog global="true">
+        <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
+            </center>
+                         <p:panel >
+                             <center>
+                             <h:commandLink action="#{bAjuste.PDF(actionEvent)}">
+                    <p:graphicImage id="export"
+                                    value="/images/pdf.png"
+                                    width="90"
+                                    height="70">
+                    </p:graphicImage>
+                </h:commandLink>
+                
+                             <h:commandLink action="#{bAjuste.printReport(actionEvent)}">
+                    <p:graphicImage id="impre" 
+                                    value="/images/print.png"
+                                    width="90"
+                                    height="70">
+                    </p:graphicImage>
+                   
+                </h:commandLink>
+                             </center>
+            </p:panel>
+             
+</h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<body>
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="users">
+            <p:growl id="msgs" showDetail="true" autoUpdate="true"/>
+
+            <div class="card">
+                <h1>Usuarios Web</h1>
+                        <p:commandButton value="Nuevo Usuario" oncomplete="PF('nuevoUser').show()"
+                                         update="dialogNueUs"/>
+                <hr/>
+                <p:dataTable id="lstUsers" var="us" value="#{busuarios.usuarios}" style="margin-bottom:20px"
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15" rowKey="#{us.IDUsuario}"
+                             selection="#{busuarios.usuarioEdit}" selectionMode="single">
+                    <f:facet name="header">
+
+                    </f:facet>
+
+                    <p:column headerText="Rol" width="25%">
+                        <h:outputText value="#{ busuarios.nombreRol(us.IDRol)}"/>
+                    </p:column>
+
+                    <p:column headerText="Nombre Copleto" width="30%" filterBy="#{us.nombres}"
+                              filterMatchMode="contains">
+                        <h:outputText value="#{us.nombres} #{us.apellidos}"/>
+                    </p:column>
+
+                    <p:column headerText="usuario" width="10%" filterBy="#{us.usuario}" filterMatchMode="contains">
+                        <h:outputText value="#{us.usuario}"/>
+                    </p:column>
+
+                    <p:column headerText="clave" width="10%">
+                        <h:outputText value="#{us.clave}"/>
+                    </p:column>
+
+                    <p:column headerText="Estado" width="10%">
+                        <h:outputText value="#{busuarios.validaActivo(us.activo)}"
+                                      style="font-weight: bold; color: #{busuarios.validaActivoColor(us.activo)}"/>
+                    </p:column>
+
+
+                </p:dataTable>
+            </div>
+            <p:contextMenu for="lstUsers">
+                <p:menuitem value="Cambiar Contraseña" oncomplete="PF('contra').show()"
+                            update=":dialogContra:gridDialogContra"/>
+                <p:menuitem value="Editar Usuario" oncomplete="PF('editUser').show()" update="dialogEdtUs"/>
+            </p:contextMenu>
+
+        </h:form>
+        <h:form id="dialogContra">
+            <p:dialog id="gridDialogContra" header="Cambiar Contraseña" widgetVar="contra" minHeight="40" modal="true">
+                <p:panelGrid columns="1">
+                    <p:outputLabel value="#{busuarios.usuarioEdit.nombres}"/>
+                    <h:outputText value="Ingrese Nueva Contraseña:"/>
+                    <p:password id="editUsuaClave1" value="#{busuarios.nuevaContrasena}" match="editUsuaClave2"
+                                feedback="true" promptLabel="Ingrese Contraseña" weakLabel="Contraseña muy debil"
+                                validatorMessage="Las clave no coinciden"
+                                goodLabel="Contraseña  buena" strongLabel="Contraseña muy fuerte"/>
+                    <h:outputText value="Repetir Contraseña:"/>
+                    <p:password id="editUsuaClave2"/>
+                    <p:commandButton value="Cambiar" action="#{busuarios.cambiarContrasenia(busuarios.usuarioEdit)}"
+                                     oncomplete="PF('contra').hide()" update=":users:msgs"/>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        <h:form id="dialogNueUs">
+            <p:dialog header="Nuevo Usuario" widgetVar="nuevoUser" minHeight="40" modal="true">
+                <p:panelGrid columns="2">
+                    <h:outputText value="Nombre Usuario:"/>
+                    <p:inputText value="#{busuarios.usuarioNuevo.usuario}"/>
+                    <h:outputText value="Contraseña:"/>
+                    <p:password id="nuevoUsuaClave1" value="#{busuarios.usuarioNuevo.clave}" match="nuevoUsuaClave2"
+                                feedback="true" promptLabel="Ingrese Contraseña" weakLabel="Contraseña muy debil"
+                                validatorMessage="Las clave no coinciden"
+                                goodLabel="Contraseña  buena" strongLabel="Contraseña muy fuerte"/>
+                    <h:outputText value="Repetir Contraseña:"/>
+                    <p:password id="nuevoUsuaClave2"/>
+                    <h:outputText value="Nombre Empleado:"/>
+                    <p:inputText value="#{busuarios.usuarioNuevo.nombres}"/>
+                    <h:outputText value="Apellidos"/>
+                    <p:inputText value="#{busuarios.usuarioNuevo.apellidos}"/>
+                    <h:outputText value="Activo:"/>
+                    <p:selectBooleanButton id="activoN" value="#{busuarios.usuarioNuevo.activo}" onLabel="Activo"
+                                           offLabel="Inactivo"/>
+                    <h:outputText value="Grupo:"/>
+                    <p:selectOneMenu id="rolN" value="#{busuarios.usuarioNuevo.IDRol}"
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItems value="#{busuarios.grupos}" var="grp" itemLabel="#{grp.nombre}"
+                                       itemValue="#{grp.IDRol}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton value="Crear Usuario"
+                                 actionListener="#{busuarios.guardarUsuario(busuarios.usuarioNuevo)}"
+                                 oncomplete="PF('nuevoUser').hide()" update=":users:msgs :users">
+                    <p:confirm header="Crear Usuario" message="Desea Crear Usuario" icon="ui-icon-alert"/>
+                </p:commandButton>
+                <p:confirmDialog global="true">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check">
+                    </p:commandButton>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close"/>
+                </p:confirmDialog>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="dialogEdtUs">
+            <p:dialog header="Nuevo Usuario" widgetVar="editUser" minHeight="40" modal="true">
+                <p:panelGrid columns="2">
+                    <h:outputText value="Nombre Usuario:"/>
+                    <p:inputText value="#{busuarios.usuarioEdit.usuario}"/>
+                    <h:outputText value="Nombre Empleado:"/>
+                    <p:inputText value="#{busuarios.usuarioEdit.nombres}"/>
+                    <h:outputText value="Apellidos:"/>
+                    <p:inputText value="#{busuarios.usuarioEdit.apellidos}"/>
+                    <h:outputText value="Activo:"/>
+                    <p:selectBooleanButton id="ActivoE" value="#{busuarios.usuarioEdit.activo}" onLabel="Activo"
+                                           offLabel="Inactivo"/>
+                    <h:outputText value="Grupo:"/>
+                    <p:selectOneMenu id="territo" value="#{busuarios.usuarioEdit.IDRol}"
+                                     converter="omnifaces.SelectItemsConverter">
+                        <f:selectItems value="#{busuarios.grupos}" var="grp" itemLabel="#{grp.nombre}"
+                                       itemValue="#{grp.IDRol}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton value="Editar" actionListener="#{busuarios.editarUsuario(busuarios.usuarioEdit)}"
+                                 oncomplete="PF('editUser').hide()" update=":users:msgs :users">
+
+                    <p:confirm header="Editar Usuario" message="Desea Editar Usuario" icon="ui-icon-alert"/>
+                </p:commandButton>
+
+
+                <p:confirmDialog global="true">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check">
+                    </p:commandButton>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close"/>
+                </p:confirmDialog>
+            </p:dialog>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
+</body>
+</html>

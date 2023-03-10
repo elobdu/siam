@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<body>
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="users">
+            <p:growl id="msgs" showDetail="true" autoUpdate="true"/>
+
+            <div class="card">
+                <h1>Usuarios APP</h1>
+
+                <p:dataTable id="lstUsers" var="us" value="#{busuariosApp.usuarios}" style="margin-bottom:20px"
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15" rowKey="#{us.IDUsuario}"
+                             selection="#{busuariosApp.usuarioEdit}" selectionMode="single">
+
+                    <p:column headerText="Codigo" width="8%">
+                        <h:outputText value="#{us.IDUsuario}" />
+                    </p:column>
+
+                    <p:column headerText="Tipo Persona" width="10%" filterBy="#{us.tipoPersona}" filterMatchMode="contains">
+                        <h:outputText value="#{us.tipoPersona}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre" width="20%" filterBy="#{us.primerNombre}" filterMatchMode="contains">
+                        <h:outputText value="#{us.primerNombre} #{us.primerApellido}" />
+                    </p:column>
+
+                    <p:column headerText="Email" width="10%" filterBy="#{us.correoElectronico}" filterMatchMode="contains">
+                        <h:outputText value="#{us.correoElectronico}" />
+                    </p:column>
+
+                    <p:column headerText="Telefono" width="10%" filterBy="#{us.celular}" filterMatchMode="contains">
+                        <h:outputText value="#{us.celular}" />
+                    </p:column>
+
+                    <p:column headerText="Aprobado" width="10%">
+                        <h:outputText value="#{busuariosApp.validaAprobado(us.aprovado)}" style="font-weight: bold; color: #{busuariosApp.validaAprobadoColor(us.aprovado)}"/>
+                    </p:column>
+                </p:dataTable>
+            </div>
+            <p:contextMenu for="lstUsers">
+                <p:menuitem value="Cambiar Contraseña"  oncomplete="PF('contra').show()" update=":dialogContra:gridDialogContra"/>
+                <p:menuitem value="Editar Usuario" oncomplete="PF('editUser').show()" update="dialogEdtUs" />
+            </p:contextMenu>
+
+        </h:form>
+        <h:form id="dialogContra">
+            <p:dialog id="gridDialogContra" header="Cambiar Contraseña" widgetVar="contra" minHeight="40" modal="true">
+                <p:panelGrid  columns="1">
+                    <p:outputLabel value="#{busuariosApp.usuarioEdit.primerNombre}"/>
+                    <h:outputText value="Ingrese Nueva Contraseña:" />
+                    <p:password id="editUsuaClave1" value="#{busuariosApp.nuevaContrasena}" match="editUsuaClave2"
+                                feedback="true" promptLabel="Ingrese Contraseña" weakLabel="Contraseña muy debil"
+                                validatorMessage="Las clave no coinciden"
+                                goodLabel="Contraseña  buena" strongLabel="Contraseña muy fuerte"/>
+                    <h:outputText value="Repetir Contraseña:" />
+                    <p:password id="editUsuaClave2" />
+                    <p:commandButton value="Cambiar" action="#{busuariosApp.cambiarContrasenia(busuariosApp.usuarioEdit)}" oncomplete="PF('contra').hide()" update=":users:msgs"/>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="dialogEdtUs">
+            <p:dialog header="Editar Usuario" widgetVar="editUser" minHeight="40" modal="true">
+                <p:panelGrid columns="2">
+                    <h:outputText value="Nombre y apellido:" />
+                    <h:panelGrid columns="2">
+                        <p:inputText value="#{busuariosApp.usuarioEdit.primerNombre}" placeholder="Primer Nombre" />
+                        <p:inputText value="#{busuariosApp.usuarioEdit.primerApellido}" placeholder="Primer Apellido"/>
+                        <p:inputText value="#{busuariosApp.usuarioEdit.segundoNombre}" placeholder="Segundo Nombre"/>
+                        <p:inputText value="#{busuariosApp.usuarioEdit.segundoApellido}" placeholder="Segundo Apellido"/>
+
+                    </h:panelGrid>
+
+                    <h:outputText value="DUI:" />
+                    <p:inputText value="#{busuariosApp.usuarioEdit.dui}" />
+                    <h:outputText value="Direccion:" />
+                    <p:inputTextarea value="#{busuariosApp.usuarioEdit.direccion}" />
+                    <h:outputText value="Activo:" />
+                    <p:selectBooleanButton id="ActivoE" value="#{busuariosApp.usuarioEdit.activo}" onLabel="Activo" offLabel="Inactivo" />
+                    <h:outputText value="Aprobado:" />
+                    <p:selectBooleanButton id="Aprovado" value="#{busuariosApp.usuarioEdit.aprovado}" onLabel="SI" offLabel="NO" />
+                    <h:outputText value="Departamento:" />
+
+                    <p:selectOneMenu id="dep" value="#{busuariosApp.usuarioEdit.departamento}" converter="omnifaces.SelectItemsConverter">
+                        <f:selectItems value="#{busuariosApp.departamentos}" var="deps" itemLabel="#{deps.nombre}" itemValue="#{deps.IDDepartamento}"/>
+                        <p:ajax event="change"
+                                update=":dialogEdtUs:municipo"
+                                listener="#{busuariosApp.obtenerMuniciposDepa(busuariosApp.usuarioEdit.departamento)}"/>
+                    </p:selectOneMenu>
+
+
+                    <h:outputText value="Municipio:" />
+                    <p:selectOneMenu id="municipo" value="#{busuariosApp.usuarioEdit.municipio}" converter="omnifaces.SelectItemsConverter">
+                        <f:selectItems value="#{busuariosApp.municipios}" var="muns" itemLabel="#{muns.nombre}" itemValue="#{muns.IDMunicipio}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Tipo de Persona:" />
+                    <p:inputText value="#{busuariosApp.usuarioEdit.tipoPersona}" />
+                    <h:outputText value="Razon Social:" />
+                    <p:inputText value="#{busuariosApp.usuarioEdit.razonSocial}" />
+                    <h:outputText value="Correo Electronico:" />
+                    <p:inputText value="#{busuariosApp.usuarioEdit.correoElectronico}" />
+                    <h:outputText value="Clave:" />
+                    <p:inputText value="#{busuariosApp.usuarioEdit.clave}" />
+                    <h:outputText value="Telefono:" />
+                    <p:inputText value="#{busuariosApp.usuarioEdit.celular}" />
+                    <h:outputText value="Longitud:" />
+                    <p:inputText value="#{busuariosApp.usuarioEdit.longitud}" />
+                    <h:outputText value="Latitud:" />
+                    <p:inputText value="#{busuariosApp.usuarioEdit.latitud}" />
+                    <h:outputText value="Fecha de Registro:" />
+                    <p:inputText value="#{busuariosApp.usuarioEdit.fechaRegistro}" />
+                </p:panelGrid>
+                <p:commandButton value="Guardar" actionListener="#{busuariosApp.editarUsuario(busuariosApp.usuarioEdit)}" oncomplete="PF('editUser').hide()" update=":users:msgs :users"/>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
+</body>
+</html>

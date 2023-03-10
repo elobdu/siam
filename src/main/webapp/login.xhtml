@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <f:event type="preRenderView" listener="#{bInfoSesion.verificaSesionIndex()}"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>SIAM</title>
+    </h:head>
+
+    <h:body styleClass="login-body">
+        <p:growl id="mensajes" showDetail="true" life="2000" />
+        <h:form id="logins">
+            <div class="login-panel ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12 logo-container">
+                        <p:graphicImage name="images/logoz.png" library="atlantis-layout" />
+                        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="atlantis-layout" />
+                        <h2>Ingrese Credeciales</h2>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:inputText value="#{ingresoLogin.nombre}" placeholder="Usuario" id="username"
+                                     onkeypress="if (event.keyCode == 13) {
+                                                 $(function () {
+                                                     PrimeFaces.focus(':logins:password');
+                                                 })
+                                             }
+                                             ;
+                                     "
+                                     required="true" label="username" />
+                    </div>
+                    <div class="ui-g-12">
+                        <p:password value="#{ingresoLogin.clave}" id="password" placeholder="Contraseña" required="true"
+                                    onkeypress="if (event.keyCode == 13) {
+                                                $(function () {
+                                                    PrimeFaces.focus(':logins:loginButton');
+                                                })
+                                            }
+                                            ;
+                                    "
+                                    label="password" />
+                    </div>
+                    <div class="ui-g-12 button-container">
+                        <p:commandButton id="loginButton" value="Ingresar" action="#{ingresoLogin.iniciarSesion()}" icon="fa fa-user" />
+                    </div>
+                    <div class="ui-g-12 logo-container">
+                        <h2>SIAM EL SALVADOR</h2>
+                    </div>
+
+                </div>
+            </div>
+        </h:form>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="atlantis-layout" />
+    </h:body>
+    <script type="text/javascript">
+        //<![CDATA[
+        function manejarLogin(xhr, status, args) {
+            if (!args.validationFailed && args.estaLogeado) {
+                setTimeout(function () {
+                    window.location = args.view;
+                }, 500);
+            }
+        }
+//]]>
+    </script>
+</html>

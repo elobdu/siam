@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:of="http://omnifaces.org/functions">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/template.xhtml">
+
+            <ui:define name="content">
+                <h:form id="alerts">
+                    <p:growl id="nesajes" showDetail="true" escape="false" />
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <h1>Alertas Tempranas</h1>
+                                <p:commandButton value="Nueva Alerta" onclick="PF('nuevoAler').show()" />
+                                <hr/>
+                                <p:dataTable id="ltsAlertast" var="alr" value="#{balertastempranas.alertasTempranaLista}" style="margin-bottom:20px"
+                                             rows="10"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15">
+                                    <p:column headerText="Id" width="5%">
+                                        <h:outputText value="#{alr.IDAlertasTempranas}" />
+                                    </p:column>
+
+                                    <p:column headerText="Titulo" width="25%">
+                                        <h:outputText value="#{alr.textoAlerta}"  />
+                                    </p:column>
+
+                                    <p:column headerText="Mensaje" width="40%">
+                                        <h:outputText value="#{alr.descripcion}" />
+                                    </p:column>
+
+                                    <p:column headerText="Destino" width="40%">
+                                        <h:outputText value="Departamentos" />
+                                    </p:column>
+
+
+                                    <p:column headerText="Estado" width="10%">
+                                        <h:outputText value="#{balertastempranas.validaActivo(alr.activo)}" style="font-weight: bold; color: #{balertastempranas.validaActivoColor(alr.activo)}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+
+                <h:form id="nuevoFomrs">
+                    <p:dialog header="Nueva Alerta" widgetVar="nuevoAler" closable="true" minHeight="40" modal="true">
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <p:outputLabel value="Titulo:" />
+                            <p:inputText value="#{balertastempranas.alertasTempranaNueva.textoAlerta}" required="true" />
+                            <p:outputLabel value="Mensaje:"/>
+                            <p:inputText value="#{balertastempranas.alertasTempranaNueva.descripcion}" required="true"/>
+                            <p:outputLabel value="Mensaje:"/>
+                            <p:selectOneMenu id="tipalerN" value="#{balertastempranas.alertasTempranaNueva.IDTipoAlerta}"
+                                             converter="omnifaces.SelectItemsConverter" required="true">
+                                <f:selectItems value="#{balertastempranas.tiposAlerta}" var="grp" itemLabel="#{grp.nombreTipoAlerta}"
+                                               itemValue="#{grp.IDTipoAlerta}"/>
+                            </p:selectOneMenu>
+                            <p:commandButton value="Guardar" actionListener="#{balertastempranas.guardarAlerta(balertastempranas.alertasTempranaNueva)}" update="alerts" oncomplete="PF('nuevoAler').hide()"/>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="editarFomrs">
+                    <p:dialog header="Editar Alerta" widgetVar="editarAler" closable="true" minHeight="40" modal="true">
+                        <h:panelGrid columns="2" cellpadding="10">
+
+                            <p:outputLabel value="Titulo:" />
+                            <p:inputText value="#{balertastempranas.alertasTempranaSelect.textoAlerta}" required="true" />
+                            <p:outputLabel value="Mensaje:"/>
+                            <p:inputText value="#{balertastempranas.alertasTempranaSelect.descripcion}" required="true"/>
+                            <p:outputLabel value="Mensaje:"/>
+                            <p:selectOneMenu id="tipalerE" value="#{balertastempranas.alertasTempranaSelect.IDTipoAlerta}"
+                                             converter="omnifaces.SelectItemsConverter" required="true">
+                                <f:selectItems value="#{balertastempranas.tiposAlerta}" var="grp" itemLabel="#{grp.nombreTipoAlerta}"
+                                               itemValue="#{grp.IDTipoAlerta}"/>
+                            </p:selectOneMenu>
+                            <p:commandButton value="Editar" actionListener="#{balertastempranas.editarAlerta(balertastempranas.alertasTempranaSelect)}" update="alerts" oncomplete="PF('editarAler').hide()"/>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
